@@ -1,0 +1,97 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+.python-version
+*.egg-info/
+*.egg
+*.log
+*.txt
+
+# -------------------------
+# Virtual Environments
+# -------------------------
+.venv/
+venv/
+env/
+
+# -------------------------
+# ML Models & NLTK Data (Baked into Docker, not tracked in git)
+# -------------------------
+models/
+nltk_data/
+
+# -------------------------
+# Build & Testing Caches
+# -------------------------
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.hatch/
+.uv/
+.coverage
+htmlcov/
+.cache/
+# Specific to aiocache if using local storage
+.aiocache/
+
+# -------------------------
+# Database / Redis (Local Dev)
+# -------------------------
+*.db
+*.sqlite3
+dump.rdb  # Redis snapshot (often created if testing aiocache locally)
+
+# -------------------------
+# Build Artifacts
+# -------------------------
+dist/
+build/
+*.whl
+
+# -------------------------
+# IDE / Editor
+# -------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -------------------------
+# Environment
+# -------------------------
+.env
+.env.*
+!.env.example
+lambda-env.json
+*.code-workspace
+
+# -------------------------
+# Docker
+# -------------------------
+docker-compose.override.yml
+docker-data/
+logs/
+nginx/logs/
+
+# -------------------------
+# Supabase
+# -------------------------
+.supabase/storage/
+.supabase/db/
+
+# -------------------------
+# OS Files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# Local Assets (logos, images not served by app)
+# -------------------------
+assets/

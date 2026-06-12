@@ -1,0 +1,107 @@
+{
+  "_metadata": {
+    "major_version": 2,
+    "minor_version": 1
+  },
+  "display_information": {
+    "name": "REHA Connect Dev",
+    "description": "Engage a polymorphic, relationship-aware heuristic engine for HubSpot-Slack intelligence (Dev).",
+    "long_description": "REHA Connect (v2026 Dev) brings your CRM directly into your conversations. Seamlessly search, share, and update HubSpot contacts, companies, and deals without ever leaving Slack. Powered by smart heuristics, REHA analyzes your CRM data in real-time to provide diagnostic insights and \"Next Best Actions,\" keeping your team productive, aligned, and focused on building relationships. (Development Environment)",
+    "background_color": "#0052CC"
+  },
+  "settings": {
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": true,
+    "event_subscriptions": {
+      "request_url": "https://interbank-unveritable-maricruz.ngrok-free.dev/api/slack/events",
+      "bot_events": [
+        "message.channels",
+        "message.im",
+        "message.groups",
+        "message.mpim",
+        "link_shared",
+        "app_uninstalled",
+        "app_home_opened"
+      ]
+    },
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://interbank-unveritable-maricruz.ngrok-free.dev/api/slack/interactions",
+      "message_menu_options_url": "https://interbank-unveritable-maricruz.ngrok-free.dev/api/slack/interactions"
+    },
+    "incoming_webhooks": {
+      "incoming_webhooks_enabled": true
+    }
+  },
+  "features": {
+    "unfurl_domains": [
+      "hubspot.com",
+      "app.hubspot.com",
+      "app-eu1.hubspot.com"
+    ],
+    "bot_user": {
+      "display_name": "REHA Connect Dev",
+      "always_online": true
+    },
+    "app_home": {
+      "home_tab_enabled": true,
+      "messages_tab_enabled": true
+    },
+    "slash_commands": [
+      {
+        "command": "/reha",
+        "url": "https://interbank-unveritable-maricruz.ngrok-free.dev/api/slack/commands",
+        "description": "HubSpot CRM (contacts, deals, tasks, reports, help)",
+        "usage_hint": "[sub-command] [query]",
+        "should_escape": false
+      }
+    ],
+    "shortcuts": [
+      {
+        "name": "Create HubSpot Record",
+        "type": "global",
+        "callback_id": "create_hubspot_record",
+        "description": "Create a new Contact, Deal, Task, or Ticket"
+      },
+      {
+        "name": "Create HubSpot Record",
+        "type": "message",
+        "callback_id": "create_hubspot_record_message",
+        "description": "Create a new Contact, Deal, Task, or Ticket from this message"
+      },
+      {
+        "name": "Open Support Ticket",
+        "type": "global",
+        "callback_id": "open_support_ticket_modal",
+        "description": "Raise a ticket with REHA Support"
+      }
+    ]
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "app_mentions:read",
+        "channels:history",
+        "channels:read",
+        "chat:write",
+        "chat:write.public",
+        "commands",
+        "groups:history",
+        "groups:read",
+        "im:history",
+        "im:read",
+        "links:read",
+        "links:write",
+        "mpim:history",
+        "mpim:read",
+        "team:read",
+        "users:read",
+        "users:read.email"
+      ]
+    },
+    "redirect_urls": [
+      "https://interbank-unveritable-maricruz.ngrok-free.dev/api/slack/oauth/callback"
+    ]
+  }
+}

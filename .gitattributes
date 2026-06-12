@@ -1,0 +1,27 @@
+# Default: normalize everything to LF
+* text=auto eol=lf
+
+# Python
+*.py text eol=lf
+
+# Config files
+*.toml text eol=lf
+*.lock text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.env text eol=lf
+*.ini text eol=lf
+
+# Docker
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
+
+# Nginx
+*.conf text eol=lf
+
+# Shell scripts (important!)
+*.sh text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
+*.ps1 text eol=crlf

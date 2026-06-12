@@ -1,0 +1,59 @@
+exclude: |
+  (?x)^(
+    \.venv/|
+    dist/|
+    build/|
+    node_modules/|
+    logs/|
+    nltk_data/|
+    models/|
+    .*\.pickle$|
+    .*\.safetensors$
+  )
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  # 1. Protection for your main branches & security
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: no-commit-to-branch
+        args: [--branch, main, --branch, master, --branch, develop]
+      - id: debug-statements
+      - id: check-added-large-files
+        args: [--maxkb=2000]
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-toml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # 2. Fast Python Linting & Formatting (replaces Flake8, Isort, Pylint)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # 3. Fast Type Checking (Optimized for FastAPI & uv)
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.389
+    hooks:
+      - id: pyright
+        entry: uv run pyright  # Direct link to your local uv environment
+
+  # 4. Spell Checking (Great for professional CRM integrations)
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.27.3
+    hooks:
+      - id: typos
+
+  # 5. uv Lock File Sync (Prevents "Broken" repos)
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.5.21
+    hooks:
+      - id: uv-lock

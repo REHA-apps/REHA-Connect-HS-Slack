@@ -1,0 +1,34 @@
+# AWS Lambda Python 3.12 base image — builds as arm64 natively on this machine.
+# Docker Desktop resolves the multi-platform image to arm64 automatically.
+# Configure the Lambda function as arm64 to match.
+#
+# IMPORTANT: always build with --provenance=false to produce a single-platform
+# Docker v2 manifest. Without it Docker Desktop adds OCI attestations which
+# create a manifest list that Lambda's image runtime rejects.
+#
+#   docker buildx build --provenance=false -f Dockerfile.lambda -t reha-connect-lambda:latest .
+#   docker tag reha-connect-lambda:latest <ecr-uri>/reha-connect:latest
+#   docker push <ecr-uri>/reha-connect:latest
+FROM public.ecr.aws/lambda/python:3.12
+
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+RUN pip install uv
+
+# Copy dependency manifests
+COPY pyproject.toml uv.lock README.md ./
+
+# Install dependencies WITHOUT ML extras.
+# torch/transformers now live exclusively in the Sentinel Lambda (C-02).
+# This cuts ~1.5 GB from the main image and eliminates the ML cold-start penalty.
+RUN uv sync --frozen --no-dev
+
+# The Lambda runtime uses /var/lang/bin/python3 (system Python), not the uv venv.
+# Add the venv site-packages to PYTHONPATH so the runtime finds all installed packages.
+ENV PYTHONPATH=${LAMBDA_TASK_ROOT}/.venv/lib/python3.12/site-packages
+
+# Copy application code
+COPY app ./app
+
+# Lambda handler: module.function format
+CMD ["app.lambda_handler.handler"]

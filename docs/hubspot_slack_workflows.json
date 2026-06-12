@@ -1,0 +1,121 @@
+[
+    {
+        "name": "Notify Slack on High-Value Lead",
+        "type": "CONTACT_FLOW",
+        "flowType": "WORKFLOW",
+        "isEnabled": true,
+        "startActionId": "notify_slack_high_value_lead",
+        "enrollmentSettings": {
+            "enrollmentTrigger": {
+                "type": "PROPERTY_CHANGE",
+                "propertyName": "hs_analytics_num_page_views",
+                "operator": "GREATER_THAN",
+                "value": "10"
+            }
+        },
+        "actions": [
+            {
+                "type": "SINGLE_CONNECTION",
+                "actionId": "notify_slack_high_value_lead",
+                "actionTypeId": "send_slack_message",
+                "fields": {
+                    "channel_id": "general",
+                    "message_text": "*High-Value Lead!* \n*Name:* {{contact.firstname}} {{contact.lastname}}\n*Email:* {{contact.email}}"
+                },
+                "actionConnection": {
+                    "type": "SINGLE_CONNECTION",
+                    "nextActionId": null
+                }
+            }
+        ]
+    },
+    {
+        "name": "Notify Slack on High-Priority Ticket",
+        "type": "PLATFORM_FLOW",
+        "flowType": "WORKFLOW",
+        "objectTypeId": "0-5",
+        "isEnabled": true,
+        "startActionId": "notify_slack_high_priority_ticket",
+        "enrollmentSettings": {
+            "enrollmentTrigger": {
+                "type": "PROPERTY_CHANGE",
+                "propertyName": "hs_ticket_priority",
+                "operator": "EQUAL",
+                "value": "High"
+            }
+        },
+        "actions": [
+            {
+                "type": "SINGLE_CONNECTION",
+                "actionId": "notify_slack_high_priority_ticket",
+                "actionTypeId": "send_slack_message",
+                "fields": {
+                    "channel_id": "general",
+                    "message_text": "*Priority Ticket!* \n*Subject:* {{ticket.subject}}\n*Status:* {{ticket.hs_pipeline_stage}}\n*Priority:* {{ticket.hs_ticket_priority}}"
+                },
+                "actionConnection": {
+                    "type": "SINGLE_CONNECTION",
+                    "nextActionId": null
+                }
+            }
+        ]
+    },
+    {
+        "name": "Notify Slack on New Email",
+        "type": "CONTACT_FLOW",
+        "flowType": "WORKFLOW",
+        "isEnabled": true,
+        "startActionId": "notify_slack_new_email",
+        "enrollmentSettings": {
+            "enrollmentTrigger": {
+                "type": "PROPERTY_CHANGE",
+                "propertyName": "hs_email_last_email_date",
+                "operator": "IS_KNOWN"
+            }
+        },
+        "actions": [
+            {
+                "type": "SINGLE_CONNECTION",
+                "actionId": "notify_slack_new_email",
+                "actionTypeId": "send_slack_message",
+                "fields": {
+                    "channel_id": "general",
+                    "message_text": "*New Conversation Received!* \n*From:* {{contact.firstname}} {{contact.lastname}}\n*Email:* {{contact.email}}\n*Portal:* {{portal_id}}"
+                },
+                "actionConnection": {
+                    "type": "SINGLE_CONNECTION",
+                    "nextActionId": null
+                }
+            }
+        ]
+    },
+    {
+        "name": "Notify Slack on New Live Chat",
+        "type": "CONTACT_FLOW",
+        "flowType": "WORKFLOW",
+        "isEnabled": true,
+        "startActionId": "notify_slack_new_live_chat",
+        "enrollmentSettings": {
+            "enrollmentTrigger": {
+                "type": "PROPERTY_CHANGE",
+                "propertyName": "hs_last_message_received_body",
+                "operator": "IS_KNOWN"
+            }
+        },
+        "actions": [
+            {
+                "type": "SINGLE_CONNECTION",
+                "actionId": "notify_slack_new_live_chat",
+                "actionTypeId": "send_slack_message",
+                "fields": {
+                    "channel_id": "general",
+                    "message_text": "*New SMS Message!* \n*From:* {{contact.firstname}} {{contact.lastname}}\n*Text:* {{contact.hs_last_message_received_body}}"
+                },
+                "actionConnection": {
+                    "type": "SINGLE_CONNECTION",
+                    "nextActionId": null
+                }
+            }
+        ]
+    }
+]
