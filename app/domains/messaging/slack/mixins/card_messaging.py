@@ -221,7 +221,7 @@ class CardMessagingMixin:
             workspace_id=workspace_id,
             sync_count=workspace.total_sync_count or 0,
             notification_count=workspace.notification_count_monthly or 0,
-            portal_id=workspace.portal_id,
+            portal_id=self.hubspot_integration.portal_id if getattr(self, "hubspot_integration", None) else "unknown",
             open_deals=open_deals,
             open_tickets=open_tickets,
         )

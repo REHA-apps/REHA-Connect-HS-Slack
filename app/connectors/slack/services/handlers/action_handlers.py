@@ -385,7 +385,7 @@ class ActionButtonHandler(InteractionHandler):
         # Portals are integrations where workspace_id starts with 'hs_'
         portals = [i for i in integrations if i.workspace_id.startswith("hs_")]
         is_last_portal = len(portals) <= 1
-        portal_id = workspace.portal_id if workspace else "Unknown"
+        portal_id = integration.portal_id if "integration" in locals() and integration else "Unknown" if workspace else "Unknown"
 
         # 3. Build and open the modal
         modal = messaging_service.cards.build_confirm_disconnect_modal(

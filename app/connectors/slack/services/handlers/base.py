@@ -328,7 +328,7 @@ class InteractionHandler(BaseInteractionHandler):
         workspace = await self.integration_service.storage.get_workspace(
             integration.workspace_id
         )
-        portal_id = workspace.portal_id if workspace else None
+        portal_id = integration.portal_id if "integration" in locals() and integration else "Unknown" if workspace else None
         builder = CardBuilder()
         modal = builder.build_upgrade_nudge_modal(
             feature_name=feature_id,

@@ -94,9 +94,12 @@ class BillingService:
             f"🔔 *Plan Reminder*: Your 7-day Pro trial expires in {days_left} days. "
             "Upgrade now to keep your advanced CRM notifications active! "
             f"Visit <{settings.PRICING_URL}"
-            f"?portal_id={workspace.portal_id}"
+            f"?portal_id={portal_id}"
             f"&state={workspace.id}|Pricing> to subscribe."
         )
+
+        hs_integ = await self.storage.get_integration(workspace.id, Provider.HUBSPOT)
+        portal_id = hs_integ.portal_id if hs_integ else "unknown"
 
         # Resolve default channel or use metadata
         channel = slack_integ.metadata.get("channel_id")

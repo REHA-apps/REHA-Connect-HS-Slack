@@ -147,11 +147,11 @@ class IntegrationStorage(BaseStorage):
             return cached
 
         # DB Lookup using the schema-defined column
-        res = await self.client.fetch_single(
-            "workspaces", {schema.external_id_key: external_id}, select=["id"]
+        res = await self.integrations.fetch_single(
+            {f"metadata->>{schema.metadata_id_key}": external_id}, select=["workspace_id"]
         )
         if res:
-            wid = res["id"]
+            wid = res["workspace_id"]
             await _hubspot_mapping_cache.set(cache_key, wid)
             return wid
         return external_id

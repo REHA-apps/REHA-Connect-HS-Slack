@@ -134,7 +134,7 @@ class HubSpotService(BaseCRMService):
 
         # 3. Fetch Workspace for Portal ID (Triple-Key Trace requirement)
         workspace = await self.storage.get_workspace(workspace_id)
-        portal_id = workspace.portal_id if workspace else None
+        portal_id = integration.portal_id if integration else None
 
         # Fallback: If workspace doesn't have portal_id, use the one from integration metadata
         if not portal_id:

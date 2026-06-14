@@ -81,10 +81,7 @@ class WorkspaceRecord(BaseRecord):
 
     id: str
     primary_email: str | None = None
-    portal_id: str | None = None
-    slack_team_id: str | None = None
     teams_tenant_id: str | None = None
-    whatsapp_phone_number_id: str | None = None
     subscription_id: str | None = None
     subscription_status: str | None = "inactive"  # 'active', 'inactive', 'trialing'
     stripe_customer_id: str | None = None
@@ -99,13 +96,6 @@ class WorkspaceRecord(BaseRecord):
     # Optional metadata
     created_at: datetime | None = None
     updated_at: datetime | None = None
-
-    @field_validator("portal_id", mode="before")
-    @classmethod
-    def coerce_to_string(cls, v: Any) -> str | None:
-        if v is None:
-            return None
-        return str(v)
 
 
 class IntegrationRecord(BaseRecord):
