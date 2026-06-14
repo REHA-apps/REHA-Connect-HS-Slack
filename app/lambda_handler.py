@@ -52,7 +52,7 @@ def handler(event: dict[str, Any], context: Any) -> Any:
                 return sqs_handler(cast(SQSEvent, event), context)
 
         # Treat as a scheduled maintenance event
-        from lambda_scheduler import handler as scheduler_handler
+        from app.lambda_scheduler import handler as scheduler_handler
 
         logger.info("Routing to scheduler — event: %s", event)
         return scheduler_handler(event, context)
