@@ -1,7 +1,7 @@
 param (
     [string]$Region = "eu-west-1",
     [string]$AccountId = "328833518397",
-    [string]$FunctionName = "reha-connect"
+    [string]$FunctionName = "reha-slack-connect"
 )
 
 $EcrUri = "$AccountId.dkr.ecr.$Region.amazonaws.com"
@@ -15,6 +15,16 @@ aws ecr get-login-password --region $Region | docker login --username AWS --pass
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to authenticate with AWS ECR. Check your AWS credentials." -ForegroundColor Red
     exit $LASTEXITCODE
+}
+
+# 1.5 Ensure ECR repository exists
+Write-Host "`n📦 Ensuring ECR repository exists..." -ForegroundColor Yellow
+aws ecr describe-repositories --repository-names $FunctionName --region $Region 2>$null
+if ($LASTEXITCODE -ne 0) {
+    aws ecr create-repository --repository-name $FunctionName --region $Region | Out-Null
+    Write-Host "   ✅ Repository created: $FunctionName" -ForegroundColor Green
+} else {
+    Write-Host "   ✅ Repository already exists." -ForegroundColor Green
 }
 
 # 2. Build the Docker image
@@ -34,11 +44,27 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-# 4. Update Lambda Function
-Write-Host "`nUpdating Lambda function code..." -ForegroundColor Yellow
-aws lambda update-function-code --function-name $FunctionName --image-uri $ImageUri --region $Region | Out-Null
+# 4. Create or Update Lambda Function
+Write-Host "`n⚡ Deploying Lambda function..." -ForegroundColor Yellow
+$FunctionExists = aws lambda get-function --function-name $FunctionName --region $Region 2>$null
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to update Lambda function." -ForegroundColor Red
+    Write-Host "   Creating new Lambda function '$FunctionName'..." -ForegroundColor Yellow
+    aws lambda create-function `
+        --function-name $FunctionName `
+        --package-type Image `
+        --code ImageUri=$ImageUri `
+        --role "arn:aws:iam::${AccountId}:role/reha-connect-lambda-role" `
+        --memory-size 1024 `
+        --timeout 30 `
+        --architectures arm64 `
+        --region $Region | Out-Null
+} else {
+    Write-Host "   Updating existing Lambda function code..." -ForegroundColor Yellow
+    aws lambda update-function-code --function-name $FunctionName --image-uri $ImageUri --region $Region | Out-Null
+}
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Failed to create or update Lambda function." -ForegroundColor Red
     exit $LASTEXITCODE
 }
 

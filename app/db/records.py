@@ -39,6 +39,12 @@ CRM_SCHEMAS: dict[Provider, ProviderSchema] = {
         metadata_id_key="slack_team_id",
         id_prefix="sl_",
     ),
+    Provider.TEAMS: ProviderSchema(
+        provider=Provider.TEAMS,
+        external_id_key="teams_tenant_id",
+        metadata_id_key="teams_tenant_id",
+        id_prefix="ms_",
+    ),
     Provider.WHATSAPP: ProviderSchema(
         provider=Provider.WHATSAPP,
         external_id_key="whatsapp_phone_number_id",
@@ -77,6 +83,7 @@ class WorkspaceRecord(BaseRecord):
     primary_email: str | None = None
     portal_id: str | None = None
     slack_team_id: str | None = None
+    teams_tenant_id: str | None = None
     whatsapp_phone_number_id: str | None = None
     subscription_id: str | None = None
     subscription_status: str | None = "inactive"  # 'active', 'inactive', 'trialing'
@@ -128,6 +135,9 @@ class IntegrationRecord(BaseRecord):
     def is_slack(self) -> bool:
         return self.provider == Provider.SLACK
 
+    def is_teams(self) -> bool:
+        return self.provider == Provider.TEAMS
+
     def is_hubspot(self) -> bool:
         return self.provider == Provider.HUBSPOT
 
@@ -151,12 +161,22 @@ class IntegrationRecord(BaseRecord):
         )
 
     @property
+    def teams_bot_token(self) -> str | None:
+        return self.credentials.get("access_token") or self.credentials.get(
+            "teams_bot_token"
+        )
+
+    @property
     def portal_id(self) -> str | None:
         return self.metadata.get("portal_id")
 
     @property
     def slack_team_id(self) -> str | None:
         return self.metadata.get("slack_team_id")
+
+    @property
+    def teams_tenant_id(self) -> str | None:
+        return self.metadata.get("teams_tenant_id")
 
     @property
     def channel_id(self) -> str | None:
@@ -234,7 +254,7 @@ class AIScoreRecord(BaseRecord):
 
 
 class UserMappingRecord(BaseRecord):
-    """Maps a HubSpot owner to a Slack user."""
+    """Maps a HubSpot owner to a messaging platform user."""
 
     required_fields: ClassVar[set[str]] = {
         "workspace_id",
@@ -245,6 +265,7 @@ class UserMappingRecord(BaseRecord):
     hubspot_owner_id: int
     hubspot_email: str | None = None
     slack_user_id: str | None = None
+    teams_user_id: str | None = None
     mapping_status: str = "auto"
 
     updated_at: datetime | None = None

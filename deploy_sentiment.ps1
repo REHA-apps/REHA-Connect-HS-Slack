@@ -1,7 +1,7 @@
 param (
     [string]$Region      = "eu-west-1",
     [string]$AccountId   = "328833518397",
-    [string]$FunctionName = "reha-connect-sentiment"
+    [string]$FunctionName = "reha-slack-connect-sentiment"
 )
 
 $EcrUri   = "$AccountId.dkr.ecr.$Region.amazonaws.com"
@@ -105,5 +105,5 @@ Write-Host "Next step — set this env var on the main Lambda:" -ForegroundColor
 Write-Host "  SENTIMENT_LAMBDA_ARN=$Arn" -ForegroundColor White
 Write-Host ""
 Write-Host "  aws lambda update-function-configuration \" -ForegroundColor DarkGray
-Write-Host "    --function-name reha-connect \" -ForegroundColor DarkGray
+Write-Host "    --function-name reha-slack-connect \" -ForegroundColor DarkGray
 Write-Host "    --environment `"Variables={SENTIMENT_LAMBDA_ARN=$Arn,...}`"" -ForegroundColor DarkGray
